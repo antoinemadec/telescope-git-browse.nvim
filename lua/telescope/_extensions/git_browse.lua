@@ -91,7 +91,10 @@ M.commit_msgs = function(opts)
     previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
     sorter = gb_sorters.preserve_order(opts),
     attach_mappings = function(_, map)
-      actions.select_default:replace(gb_actions.do_stuff)
+      actions.select_default:replace(gb_actions.select_preview_default)
+      actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
+      actions.select_vertical:replace(gb_actions.select_preview_vertical)
+      actions.select_tab:replace(gb_actions.select_preview_tab)
       return true
     end,
   }):find()
