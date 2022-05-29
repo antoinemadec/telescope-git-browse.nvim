@@ -1,11 +1,10 @@
 # telescope-git-browse.nvim
 Git browsing extension for [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim).
 
-Improve on built-in and add git pickers:
    - impove **git_commits**
       - don't reorder commits when filtering them
-      - add commit hash, date, author and message in preview
-      - default actions open the commit previews
+      - add commit SHA/date/author/message in preview
+      - actions open the commit preview
    - add git **live_grep** and **grep_string**
 
 # Installation
