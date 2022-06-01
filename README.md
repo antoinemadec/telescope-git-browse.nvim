@@ -6,6 +6,7 @@ Git browsing extension for [telescope.nvim](https://github.com/nvim-telescope/te
       - add commit SHA/date/author/message in preview
       - actions open the commit preview
    - add git **live_grep** and **grep_string**
+   - add tag **live_grep**
 
 # Installation
 
@@ -38,3 +39,4 @@ require('telescope').load_extension('git_browse')
 | `Telescope git_browse commit_msgs`    |   Replaces `git_commits` : no reordering, more info, actions open the commit  |                                                       |
 | `Telescope git_browse live_grep`      |   Equivalent of `live_grep` using `git grep`                                  | Not fuzzy                                             |
 | `Telescope git_browse grep_string`    |   Equivalent of `grep_string` using `git grep`. Default: search for \<cword\> | Fuzzy. Call with `search=` to search in the whole repo|
+| `Telescope git_browse live_tags`      |   Equivalent of `live_grep` in ctags files                                    | Not fuzzy                                             |
