@@ -30,7 +30,7 @@ local set_opts_cwd = function(opts)
 
   -- Find root of git directory and remove trailing newline characters
   local git_root, ret = utils.get_os_command_output({ "git", "rev-parse", "--show-toplevel" }, opts.cwd)
-  local use_git_root = utils.get_default(opts.use_git_root, true)
+  local use_git_root = vim.F.if_nil(opts.use_git_root, true)
 
   if ret ~= 0 then
     local in_worktree = utils.get_os_command_output({ "git", "rev-parse", "--is-inside-work-tree" }, opts.cwd)

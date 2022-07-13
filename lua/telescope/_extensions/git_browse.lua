@@ -29,8 +29,8 @@ M_git.live_grep = function(opts)
     return
   end
 
-  local recurse_submodules = utils.get_default(opts.recurse_submodules, false)
-  local git_command = utils.get_default(opts.git_command, git_grep_command)
+  local recurse_submodules = vim.F.if_nil(opts.recurse_submodules, false)
+  local git_command = vim.F.if_nil(opts.git_command, git_grep_command)
 
   local live_grepper = finders.new_job(function(prompt)
     if not prompt or prompt == "" then
@@ -56,8 +56,8 @@ M_git.grep_string = function(opts)
     return
   end
 
-  local recurse_submodules = utils.get_default(opts.recurse_submodules, false)
-  local git_command = utils.get_default(opts.git_command, git_grep_command)
+  local recurse_submodules = vim.F.if_nil(opts.recurse_submodules, false)
+  local git_command = vim.F.if_nil(opts.git_command, git_grep_command)
 
   local word = opts.search or vim.fn.expand "<cword>"
   local search = opts.use_regex and word or gb_utils.escape_chars(word)
@@ -88,7 +88,7 @@ end
 
 M_git.commit_msgs = function(opts)
   opts.entry_maker = vim.F.if_nil(opts.entry_maker, make_entry.gen_from_git_commits(opts))
-  local git_command = utils.get_default(opts.git_command, git_log_command)
+  local git_command = vim.F.if_nil(opts.git_command, git_log_command)
 
   pickers.new(opts, {
     prompt_title = "GitBrowse Commits",
