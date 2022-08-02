@@ -52,7 +52,7 @@ local search_cb_jump = function(self, bufnr, query)
 end
 
 M.git_commit_diff_to_parent = defaulter(function(opts)
-  local cmd = utils.get_default(opts.git_preview_command, git_preview_command)
+  local cmd = vim.F.if_nil(opts.git_preview_command, git_preview_command)
   return previewers.new_buffer_previewer {
     title = "Git Diff to Parent Preview",
     teardown = search_teardown,
