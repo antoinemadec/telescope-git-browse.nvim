@@ -18,7 +18,7 @@ local gb_sorters = require('telescope._extensions.git_browse.sorters')
 local gb_utils = require('telescope._extensions.git_browse.utils')
 
 local git_grep_command = { 'git', 'grep', '--line-number', '--column', '-I', '--ignore-case' }
-local git_log_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--", "." }
+local git_log_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--" }
 
 M_git.live_grep = function(opts)
   if opts.is_bare then
@@ -86,23 +86,42 @@ M_git.grep_string = function(opts)
   }):find()
 end
 
-M_git.commit_msgs = function(opts)
+local commit_msgs_core = function(opts)
   opts.entry_maker = vim.F.if_nil(opts.entry_maker, make_entry.gen_from_git_commits(opts))
   local git_command = vim.F.if_nil(opts.git_command, git_log_command)
+  if opts.git_files_or_dirs then
+    git_command = vim.tbl_flatten { git_command, opts.git_files_or_dirs }
+  end
 
-  pickers.new(opts, {
-    prompt_title = "GitBrowse Commits",
-    finder = finders.new_oneshot_job(git_command, opts),
-    previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
-    sorter = gb_sorters.preserve_order(opts),
-    attach_mappings = function(_, map)
-      actions.select_default:replace(gb_actions.select_preview_default)
-      actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
-      actions.select_vertical:replace(gb_actions.select_preview_vertical)
-      actions.select_tab:replace(gb_actions.select_preview_tab)
-      return true
-    end,
-  }):find()
+  pickers
+    .new(opts, {
+      prompt_title = "GitBrowse Commits",
+      finder = finders.new_oneshot_job(git_command, opts),
+      previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
+      sorter = gb_sorters.preserve_order(opts),
+      attach_mappings = function(_, map)
+        actions.select_default:replace(gb_actions.select_preview_default)
+        actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
+        actions.select_vertical:replace(gb_actions.select_preview_vertical)
+        actions.select_tab:replace(gb_actions.select_preview_tab)
+        return true
+      end,
+    })
+    :find()
+end
+
+M_git.commit_msgs = function(opts)
+  commit_msgs_core(opts)
+end
+
+M_git.bcommit_msgs = function(opts)
+  opts.git_files_or_dirs = vim.api.nvim_buf_get_name(0)
+  commit_msgs_core(opts)
+end
+
+M_git.ccommit_msgs = function(opts)
+  opts.git_files_or_dirs = vim.fn.getcwd()
+  commit_msgs_core(opts)
 end
 
 M_file.live_tags = function(opts)
@@ -163,6 +182,8 @@ return require('telescope').register_extension({
     live_grep = gb_with_checks.live_grep,
     grep_string = gb_with_checks.grep_string,
     commit_msgs = gb_with_checks.commit_msgs,
+    bcommit_msgs = gb_with_checks.bcommit_msgs,
+    ccommit_msgs = gb_with_checks.ccommit_msgs,
     live_tags = M_file.live_tags,
   },
 })
