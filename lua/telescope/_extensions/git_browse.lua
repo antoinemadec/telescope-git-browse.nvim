@@ -69,12 +69,13 @@ M_git.grep_string = function(opts)
     additional_args = opts.additional_args(opts)
   end
 
+  -- TODO: when adding '--' inbetween word_match and search, vim.flatten sometimes skip search.
+  -- this behavior is not consistant and seem to arise more on slower machines
   local args = vim.tbl_flatten {
     git_command,
     recurse_submodules,
     additional_args,
     word_match,
-    "--",
     search,
   }
 
