@@ -18,7 +18,7 @@ local gb_sorters = require('telescope._extensions.git_browse.sorters')
 local gb_utils = require('telescope._extensions.git_browse.utils')
 
 local git_grep_command = { 'git', 'grep', '--line-number', '--column', '-I', '--ignore-case' }
-local git_log_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--" }
+local git_log_command = { "git", "log", "--graph", "--oneline", "--decorate", "--", "." }
 
 M_git.live_grep = function(opts)
   if opts.is_bare then
