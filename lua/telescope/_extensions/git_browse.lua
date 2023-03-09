@@ -18,7 +18,7 @@ local gb_sorters = require('telescope._extensions.git_browse.sorters')
 local gb_utils = require('telescope._extensions.git_browse.utils')
 
 local git_grep_command = { 'git', 'grep', '--line-number', '--column', '-I', '--ignore-case' }
-local git_log_command = { "git", "log", "--graph", "--oneline", "--decorate", "--", "." }
+local git_log_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--", "." }
 
 M_git.live_grep = function(opts)
   if opts.is_bare then
@@ -100,7 +100,7 @@ local commit_msgs_core = function(opts)
       finder = finders.new_oneshot_job(git_command, opts),
       previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
       sorter = gb_sorters.preserve_order(opts),
-      attach_mappings = function(_, map)
+      attach_mappings = function(_, _)
         actions.select_default:replace(gb_actions.select_preview_default)
         actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
         actions.select_vertical:replace(gb_actions.select_preview_vertical)
