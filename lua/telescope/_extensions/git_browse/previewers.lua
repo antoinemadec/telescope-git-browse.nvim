@@ -2,7 +2,6 @@ local M = {}
 local conf = require("telescope.config").values
 local previewers = require "telescope.previewers"
 local putils = require "telescope.previewers.utils"
-local utils = require "telescope.utils"
 
 local git_preview_command = { 'git', '--no-pager', 'show', '--no-color', '--pretty' }
 
