@@ -96,7 +96,7 @@ local commit_msgs_core = function(opts)
 
   pickers
       .new(opts, {
-        prompt_title = "GitBrowse Commits" .. opts.extra_prompt_title,
+        prompt_title = "GitBrowse Commits" .. vim.F.if_nil(opts.extra_prompt_title, ""),
         finder = finders.new_oneshot_job(git_command, opts),
         previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
         sorter = gb_sorters.preserve_order(opts),
@@ -117,7 +117,7 @@ end
 
 M_git.bcommit_msgs = function(opts)
   opts.git_files_or_dirs = vim.api.nvim_buf_get_name(0)
-  opts.extra_prompt_title = " (" .. vim.fn.expand('%') .. ")"
+  opts.extra_prompt_title = " (" .. vim.fn.expand('%:.') .. ")"
   commit_msgs_core(opts)
 end
 
