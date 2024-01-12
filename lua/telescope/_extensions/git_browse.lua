@@ -95,20 +95,20 @@ local commit_msgs_core = function(opts)
   end
 
   pickers
-    .new(opts, {
-      prompt_title = "GitBrowse Commits",
-      finder = finders.new_oneshot_job(git_command, opts),
-      previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
-      sorter = gb_sorters.preserve_order(opts),
-      attach_mappings = function(_, _)
-        actions.select_default:replace(gb_actions.select_preview_default)
-        actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
-        actions.select_vertical:replace(gb_actions.select_preview_vertical)
-        actions.select_tab:replace(gb_actions.select_preview_tab)
-        return true
-      end,
-    })
-    :find()
+      .new(opts, {
+        prompt_title = "GitBrowse Commits" .. opts.extra_prompt_title,
+        finder = finders.new_oneshot_job(git_command, opts),
+        previewer = gb_previewers.git_commit_diff_to_parent.new(opts),
+        sorter = gb_sorters.preserve_order(opts),
+        attach_mappings = function(_, _)
+          actions.select_default:replace(gb_actions.select_preview_default)
+          actions.select_horizontal:replace(gb_actions.select_preview_horizontal)
+          actions.select_vertical:replace(gb_actions.select_preview_vertical)
+          actions.select_tab:replace(gb_actions.select_preview_tab)
+          return true
+        end,
+      })
+      :find()
 end
 
 M_git.commit_msgs = function(opts)
@@ -117,11 +117,13 @@ end
 
 M_git.bcommit_msgs = function(opts)
   opts.git_files_or_dirs = vim.api.nvim_buf_get_name(0)
+  opts.extra_prompt_title = " (" .. vim.fn.expand('%') .. ")"
   commit_msgs_core(opts)
 end
 
 M_git.ccommit_msgs = function(opts)
   opts.git_files_or_dirs = vim.fn.getcwd()
+  opts.extra_prompt_title = " (" .. vim.fn.getcwd() .. ")"
   commit_msgs_core(opts)
 end
 
